@@ -93,7 +93,7 @@ export function SplineSceneBasic() {
             }}
           >
             <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+              scene="/spline/robot.splinecode"
               className="h-full w-full"
               enabled={shouldLoadScene}
               onLoad={() => setSceneLoaded(true)}

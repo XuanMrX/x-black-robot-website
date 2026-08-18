@@ -54,6 +54,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/spline/robot.splinecode",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
   turbopack: {

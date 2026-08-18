@@ -13,10 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://prod.spline.design" />
-        <link rel="dns-prefetch" href="https://prod.spline.design" />
-      </head>
+      <head />
       <body>{children}</body>
     </html>
   );
