@@ -2,16 +2,6 @@
 
 一个极简黑色视觉风格的个人网站，用于展示 AI First 的个人品牌、作品橱窗和社交入口。
 
-## 技术栈
-
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-- Spline 3D
-- shadcn 风格组件结构
-
 ## 本地运行
 
 先安装依赖：
@@ -36,12 +26,6 @@ http://localhost:3000
 
 ```bash
 npm run build
-```
-
-类型检查：
-
-```bash
-npm run typecheck
 ```
 
 ## 发布到 GitHub
@@ -210,19 +194,7 @@ example.com
 值：你的 Pages 项目地址
 ```
 
-## 常见问题
 
-### 图片加载慢
-
-项目中的作品图已经放在 `public/` 目录，并使用 `next/image` 优化。不要直接引用大尺寸外链图片，优先使用本地静态资源。
-
-### Spline 机器人加载慢
-
-开屏机器人是远程 Spline 3D 场景，首次加载速度取决于网络和 Spline 资源大小。可以保留 loading 状态，或后续把 3D 场景进一步压缩。
-
-### favicon 没有更新
-
-浏览器会缓存标签图标。更新 `app/icon.png` 后，如果没有立刻变化，重新打开标签页或清理浏览器缓存即可。
 
 ## 项目结构
 
