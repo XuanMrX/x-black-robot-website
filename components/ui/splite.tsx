@@ -7,7 +7,9 @@ const Spline = lazy(() => import("@splinetool/react-spline"));
 interface SplineSceneProps {
   scene: string;
   className?: string;
+  enabled?: boolean;
   onLoad?: () => void;
+  preview?: React.ReactNode;
 }
 
 class SplineErrorBoundary extends React.Component<
@@ -59,18 +61,30 @@ function SplineUnavailable() {
   );
 }
 
-export function SplineScene({ scene, className, onLoad }: SplineSceneProps) {
+export function SplineScene({
+  scene,
+  className,
+  enabled = true,
+  onLoad,
+  preview,
+}: SplineSceneProps) {
   const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
   const [sceneLoaded, setSceneLoaded] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
+
     const canvas = document.createElement("canvas");
     const context =
       canvas.getContext("webgl2") ||
       canvas.getContext("webgl") ||
       canvas.getContext("experimental-webgl");
     setWebglSupported(Boolean(context));
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) {
+    return preview ? <>{preview}</> : null;
+  }
 
   if (webglSupported === false) {
     return <SplineUnavailable />;
@@ -80,13 +94,12 @@ export function SplineScene({ scene, className, onLoad }: SplineSceneProps) {
     <SplineErrorBoundary>
       <div className="relative h-full w-full">
         {!sceneLoaded ? (
-          <div className="absolute inset-0 z-10 flex h-full w-full items-center justify-center bg-black">
-            <div className="relative flex h-56 w-56 items-center justify-center">
-              <div className="absolute inset-0 rounded-full bg-white/10 blur-3xl" />
-              <div className="relative grid h-28 w-24 place-items-center rounded-[2rem] border border-white/20 bg-white/[0.06] shadow-2xl">
+          <div className="absolute inset-0 z-10 bg-black">
+            {preview ?? (
+              <div className="flex h-full w-full items-center justify-center">
                 <span className="loader" />
               </div>
-            </div>
+            )}
           </div>
         ) : null}
         <Suspense

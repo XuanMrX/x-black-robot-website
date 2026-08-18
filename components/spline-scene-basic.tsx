@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowDownRight, Sparkles } from "lucide-react";
 import { SplineScene } from "@/components/ui/splite";
@@ -9,6 +9,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 
 export function SplineSceneBasic() {
   const [sceneLoaded, setSceneLoaded] = useState(false);
+  const [shouldLoadScene, setShouldLoadScene] = useState(false);
   const rotateX = useMotionValue(0);
   const rotateY = useMotionValue(0);
   const x = useMotionValue(0);
@@ -36,6 +37,12 @@ export function SplineSceneBasic() {
     x.set(0);
     y.set(0);
   }
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setShouldLoadScene(true), 1200);
+
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   return (
     <Card className="relative h-[100svh] w-full overflow-hidden rounded-none border-0 bg-black/[0.96]">
@@ -88,16 +95,41 @@ export function SplineSceneBasic() {
             <SplineScene
               scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
               className="h-full w-full"
+              enabled={shouldLoadScene}
               onLoad={() => setSceneLoaded(true)}
+              preview={<RobotPreview isLoading={shouldLoadScene && !sceneLoaded} />}
             />
           </motion.div>
-          {!sceneLoaded ? (
+          {shouldLoadScene && !sceneLoaded ? (
             <p className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 text-xs font-semibold uppercase tracking-[0.24em] text-white/50">
-              Loading 3D scene
+              Loading 3D in background
             </p>
           ) : null}
         </div>
       </div>
     </Card>
+  );
+}
+
+function RobotPreview({ isLoading }: { isLoading: boolean }) {
+  return (
+    <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-black">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.22),transparent_34%),radial-gradient(circle_at_70%_45%,rgba(255,255,255,0.08),transparent_42%)]" />
+      <div className="absolute right-[10%] top-[12%] h-36 w-20 rotate-[18deg] rounded-full bg-[linear-gradient(120deg,rgba(255,255,255,0.42),rgba(28,28,28,0.95)_36%,rgba(0,0,0,1)_72%)] blur-[0.2px] shadow-[0_22px_80px_rgba(255,255,255,0.14)] md:h-52 md:w-28" />
+      <div className="absolute right-[3%] top-[30%] h-20 w-28 rotate-[-18deg] rounded-[2rem] bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.62),rgba(25,25,25,0.96)_38%,rgba(0,0,0,1)_70%)] shadow-[0_18px_72px_rgba(255,255,255,0.13)] md:h-28 md:w-40" />
+      <div className="absolute right-[7%] top-[31%] flex rotate-[-18deg] gap-1.5 md:gap-2">
+        {[0, 1, 2, 3].map((item) => (
+          <span
+            key={item}
+            className="h-12 w-4 rounded-full bg-[linear-gradient(110deg,rgba(255,255,255,0.72),rgba(24,24,24,0.98)_46%,rgba(0,0,0,1))] shadow-[inset_0_0_10px_rgba(255,255,255,0.18)] md:h-16 md:w-5"
+          />
+        ))}
+      </div>
+      <div className="absolute inset-x-[8%] bottom-16 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute bottom-24 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/55 backdrop-blur">
+        {isLoading ? <span className="h-2 w-2 rounded-full bg-white/70 animate-pulse" /> : null}
+        <span>{isLoading ? "Preparing 3D" : "3D preview"}</span>
+      </div>
+    </div>
   );
 }
